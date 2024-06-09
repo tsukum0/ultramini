@@ -6,11 +6,9 @@ $var[ultramini_panic;$if[$varExists[ultramini_panic.api]==true]1$else0$endif]
    $endif
 $if[$or[$getVar[ultramini.api]==;$if[$var[ultramini_panic]==1]$getVar[ultramini_panic.api]$else0$endif==1]==true]
    $textSplit[$botCommands[§];§]
-
    $var[px2;$splitText[>]]
-
-   $var[color;#63DEA4]
-   $var[version;1]
+   $var[color;#EBF8FF]
+   $var[version;3]
    $setVar[ultramini.api;$var[px2]∆$var[color]∆$var[version]]
    $var[log;$var[log]
 `ultramini: $username[$botID](ultramini.api: > $var[px2]∆$var[color]∆$var[version])`]
@@ -34,7 +32,7 @@ $if[$or[$getVar[ultramini.api]==;$if[$var[ultramini_panic]==1]$getVar[ultramini_
          $if[$var[version]>$httpResult]
             $var[log;$var[log]
 `ultramini: $username[$botID]: An error occurred in the version of the source, now it's solved (ultramini.api: > $var[px]∆$var[color]∆$httpResult)`]
-            $setVar[ultramini.api;$var[px]∆$var[color]∆$var[version]]
+            $setVar[ultramini.api;$var[px]∆$var[color]∆$httpResult]
             $endif
          $if[$var[version]<$httpResult]
             $var[log;$var[log]
@@ -48,7 +46,6 @@ $if[$or[$getVar[ultramini.api]==;$if[$var[ultramini_panic]==1]$getVar[ultramini_
          $footerIcon[$authorAvatar]
          $footer[$var[px]$toLowercase[$message]]
          $endif
-      $c[]
       $c[help]
       $if[$var[1]==help]
          $description[Prefix = $var[px]]
