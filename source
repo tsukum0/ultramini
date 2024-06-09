@@ -1,14 +1,19 @@
 $nomention
+$var[mirror;https://raw.githubusercontent.com/tsukum0/ultramini/main/]
 $var[log;]
 $var[1;$toLowercase[$message[1]]]
 $var[ultramini_panic;$if[$varExists[ultramini_panic.api]==true]1$else0$endif]
+   $endif
 $if[$or[$getVar[ultramini.api]==;$if[$var[ultramini_panic]==1]$getVar[ultramini_panic.api]$else0$endif==1]==true]
    $textSplit[$botCommands[§];§]
+
    $var[px2;$splitText[>]]
+
    $var[color;#63DEA4]
-   $setVar[ultramini.api;$var[px2]∆$var[color]]
+   $var[version;1]
+   $setVar[ultramini.api;$var[px2]∆$var[color]∆$var[version]]
    $var[log;$var[log]
-`ultramini: $username[$botID](ultramini.api: > $var[px2]∆$var[color])`]
+`ultramini: $username[$botID](ultramini.api: > $var[px2]∆$var[color]∆$var[version])`]
    $if[$var[ultramini_panic]==1]
       $setVar[ultramini_panic.api;0]
       $var[log;$var[log]
@@ -19,11 +24,23 @@ $if[$or[$getVar[ultramini.api]==;$if[$var[ultramini_panic]==1]$getVar[ultramini_
       $var[log;$var[log]
 `ultramini: $username[$botID](ultramini.db: > 0)`]
       $endif
-   $var[log]
    $else
    $textSplit[$getVar[ultramini.api];∆]
    $var[px;$splitText[1]]
    $var[color;$splitText[2]]
+   $var[version;$splitText[3]]
+   $httpGet[$var[mirror]version]
+      $if[$httpResult!=$var[version]]
+         $if[$var[version]>$httpResult]
+            $var[log;$var[log]
+`ultramini: $username[$botID]: An error occurred in the version of the source, now it's solved (ultramini.api: > $var[px]∆$var[color]∆$httpResult)`]
+            $setVar[ultramini.api;$var[px]∆$var[color]∆$var[version]]
+            $endif
+         $if[$var[version]<$httpResult]
+            $var[log;$var[log]
+`ultramini: $username[$botID]: There is a new update available!`]
+            $endif
+         $endif
       $c[ping]
       $if[$var[1]==ping]
          $description[ping: $pingms]
@@ -42,8 +59,10 @@ help]
          $footerIcon[$authorAvatar]
          $footer[$var[px]$toLowercase[$message]]
          $endif
+      $c[eval]
       $if[$var[1]==eval]
          $onlyForIDs[$botOwnerID;]
          $eval[$message]
          $endif
    $endif
+$var[log]
