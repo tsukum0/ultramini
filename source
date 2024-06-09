@@ -1,0 +1,49 @@
+$nomention
+$var[log;]
+$var[1;$toLowercase[$message[1]]]
+$var[ultramini_panic;$if[$varExists[ultramini_panic.api]==true]1$else0$endif]
+$if[$or[$getVar[ultramini.api]==;$if[$var[ultramini_panic]==1]$getVar[ultramini_panic.api]$else0$endif==1]==true]
+   $textSplit[$botCommands[§];§]
+   $var[px2;$splitText[>]]
+   $var[color;#63DEA4]
+   $setVar[ultramini.api;$var[px2]∆$var[color]]
+   $var[log;$var[log]
+`ultramini: $username[$botID](ultramini.api: > $var[px2]∆$var[color])`]
+   $if[$var[ultramini_panic]==1]
+      $setVar[ultramini_panic.api;0]
+      $var[log;$var[log]
+`ultramini: (ultramini_panic.api: > 0)`]
+      $endif
+   $if[$varExists[ultramini.db]==true]
+      $setVar[ultramini.db;0]
+      $var[log;$var[log]
+`ultramini: $username[$botID](ultramini.db: > 0)`]
+      $endif
+   $var[log]
+   $else
+   $textSplit[$getVar[ultramini.api];∆]
+   $var[px;$splitText[1]]
+   $var[color;$splitText[2]]
+      $c[ping]
+      $if[$var[1]==ping]
+         $description[ping: $pingms]
+         $color[$var[color]]
+         $footerIcon[$authorAvatar]
+         $footer[$var[px]$toLowercase[$message]]
+         $endif
+      $c[]
+      $c[help]
+      $if[$var[1]==help]
+         $description[Prefix = $var[px]]
+$addField[basic;
+ping
+help]
+         $color[$var[color]]
+         $footerIcon[$authorAvatar]
+         $footer[$var[px]$toLowercase[$message]]
+         $endif
+      $if[$var[1]==eval]
+         $onlyForIDs[$botOwnerID;]
+         $eval[$message]
+         $endif
+   $endif
